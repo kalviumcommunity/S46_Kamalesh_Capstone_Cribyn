@@ -123,6 +123,19 @@ const HousePropertySchema = new mongoose.Schema(
     pictures: {
       type: [String],
     },
+    price: {
+      type: Number,
+      required: true,
+    },
+    genderPref: {
+      type: String,
+      required: true,
+      enum: ["male", "female", "no preference"],
+    },
+    depositAmount: {
+      type: Number,
+      required: true
+    }
   },
   {
     timestamps: true,
