@@ -21,13 +21,10 @@ const UserSchema = new mongoose.Schema(
     password: {
       type: String,
       required: true,
-      match: [
-        /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
-        "Password must contain at least 8 characters, one letter, one number and one special character",
-      ],
     },
     profilePicture: {
       type: String,
+      default: '',
     },
     adsPosted: [
       {
@@ -134,8 +131,8 @@ const HousePropertySchema = new mongoose.Schema(
     },
     depositAmount: {
       type: Number,
-      required: true
-    }
+      required: true,
+    },
   },
   {
     timestamps: true,
