@@ -1,12 +1,35 @@
 require("dotenv").config();
-const app = require('./routes')
+const app = require("./routes");
+const mongoose = require("mongoose");
 
-const port = process.env.PORT || 8000
+const port = process.env.PORT || 8000;
 
-app.get('/', (req, res) => {
-    res.json({message:`Running successfully in port ${port}`})
-})
+const connectDB = async () => {
+  try {
+    mongoose.connect(process.env.mongoURI);
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+connectDB();
+
+const disconnectDB = async () => {
+  try {
+    await mongoose.disconnect();
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+//HOME Route
+app.get("/", (req, res) => {
+  res.json({
+    connectionStatus:
+      mongoose.connection.readyState === 1 ? "Connected" : "Not connected",
+  });
+});
 
 app.listen(port, () => {
-    console.log(`server running in port ${process.env.PORT}`)
-})
+  console.log(`server running in port ${process.env.PORT}`);
+});
