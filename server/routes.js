@@ -70,4 +70,40 @@ app.post("/users/login", async (req, res) => {
   }
 });
 
+// To Edit User Data  ✔️
+app.put("/users/:userid", async (req, res) => {
+  const { userid } = req.params;
+  try {
+    const updatedUser = await User.findByIdAndUpdate(userid, req.body, {
+      new: true,
+    });
+    if (!updatedUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    res.json(updatedUser);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+});
+
+// To Edit the Post   ✔️
+app.put("/posts/:postid", async (req, res) => {
+  const { postid } = req.params;
+  try {
+    const updatedPost = await HouseProperty.findByIdAndUpdate(
+      postid,
+      req.body,
+      {
+        new: true,
+      }
+    );
+    if (!updatedPost) {
+      return res.status(404).json({ message: "Post not found" });
+    }
+    res.json(updatedPost);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+});
+
 module.exports = app;
