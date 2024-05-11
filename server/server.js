@@ -4,23 +4,6 @@ const mongoose = require("mongoose");
 
 const port = process.env.PORT || 8000;
 
-const connectDB = async () => {
-  try {
-    mongoose.connect(process.env.mongoURI);
-  } catch (err) {
-    console.log(err);
-  }
-};
-
-connectDB();
-
-const disconnectDB = async () => {
-  try {
-    await mongoose.disconnect();
-  } catch (err) {
-    console.log(err);
-  }
-};
 
 //HOME Route
 app.get("/", (req, res) => {
