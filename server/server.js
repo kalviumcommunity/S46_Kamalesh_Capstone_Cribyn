@@ -1,13 +1,21 @@
 require("dotenv").config();
-const app = require("./routes");
+const express = require("express");
+const app = express();
 const mongoose = require("mongoose");
+const cors = require("cors");
+const postRoutes = require("./routes/postRoutes");
+const userRoutes = require("./routes/userRoutes");
 
 const port = process.env.PORT || 8000;
 
+app.use(express.json());
+app.use(cors());
+app.use("/api/users", userRoutes);
+app.use("/api/posts", postRoutes);
+
 const connectDB = async () => {
   try {
-    await mongoose.connect(process.env.mongoURI);
-    console.log("Connected to MongoDB");
+    mongoose.connect(process.env.mongoURI);
   } catch (err) {
     console.log(err);
   }
@@ -18,7 +26,6 @@ connectDB();
 const disconnectDB = async () => {
   try {
     await mongoose.disconnect();
-    console.log("Disconnected from MongoDB");
   } catch (err) {
     console.log(err);
   }

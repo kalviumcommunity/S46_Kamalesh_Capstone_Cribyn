@@ -1,37 +1,14 @@
-const express = require("express");
-const app = express();
-const cors = require("cors");
-const { HouseProperty, User } = require("./schemas.js");
 const bcrypt = require("bcrypt");
-app.use(express.json());
-app.use(cors());
+const { User } = require("../models/User");
 
 // To access All the USERS ✔️
-app.get("/allusers", async (req, res) => {
+const getAllUsers = async (req, res) => {
   const users = await User.find();
   res.status(201).json(users);
-});
-
-// To access All the POSTS ✔️
-app.get("/allposts", async (req, res) => {
-  const users = await HouseProperty.find();
-  res.status(201).json(users);
-});
-
-// To create a new POST ✔️
-app.post("/new-post", async (req, res) => {
-  try {
-    const newpost = new HouseProperty(req.body);
-    const saved = await newpost.save();
-
-    res.json(saved);
-  } catch (err) {
-    res.status(400).json(err);
-  }
-});
+};
 
 // To create a new USER (Signup)  ✔️
-app.post("/new-user", async (req, res) => {
+const registerNewUser = async (req, res) => {
   try {
     let hashedpassword = await bcrypt.hash(req.body.password, 10);
     let user = {
@@ -49,10 +26,10 @@ app.post("/new-user", async (req, res) => {
   } catch (err) {
     res.status(400).send(err.message);
   }
-});
+};
 
 //  POST method for USER LOGIN ✔️
-app.post("/users/login", async (req, res) => {
+const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
 
@@ -68,10 +45,10 @@ app.post("/users/login", async (req, res) => {
   } catch (err) {
     res.status(400).json({ message: err.message });
   }
-});
+};
 
 // To Edit User Data  ✔️
-app.put("/users/:userid", async (req, res) => {
+const updateUser = async (req, res) => {
   const { userid } = req.params;
   try {
     const updatedUser = await User.findByIdAndUpdate(userid, req.body, {
@@ -84,26 +61,6 @@ app.put("/users/:userid", async (req, res) => {
   } catch (err) {
     res.status(400).json({ message: err.message });
   }
-});
+};
 
-// To Edit the Post   ✔️
-app.put("/posts/:postid", async (req, res) => {
-  const { postid } = req.params;
-  try {
-    const updatedPost = await HouseProperty.findByIdAndUpdate(
-      postid,
-      req.body,
-      {
-        new: true,
-      }
-    );
-    if (!updatedPost) {
-      return res.status(404).json({ message: "Post not found" });
-    }
-    res.json(updatedPost);
-  } catch (err) {
-    res.status(400).json({ message: err.message });
-  }
-});
-
-module.exports = app;
+module.exports = { registerNewUser, loginUser, updateUser, getAllUsers };

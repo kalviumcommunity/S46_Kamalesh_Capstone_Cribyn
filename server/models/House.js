@@ -1,49 +1,5 @@
 const mongoose = require("mongoose");
 
-const UserSchema = new mongoose.Schema(
-  {
-    name: {
-      type: String,
-      required: true,
-    },
-    mobileNumber: {
-      type: String,
-      required: true,
-      unique: true,
-      match: [/^[0-9]{10}$/, "Please enter a valid mobile number"],
-    },
-    email: {
-      type: String,
-      required: true,
-      unique: true,
-      match: [/\S+@\S+\.\S+/, "Please enter a valid email address"],
-    },
-    password: {
-      type: String,
-      required: true,
-    },
-    profilePicture: {
-      type: String,
-      default: '',
-    },
-    adsPosted: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "HouseProperty",
-      },
-    ],
-    postsSaved: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "HouseProperty",
-      },
-    ],
-  },
-  {
-    timestamps: true,
-  }
-);
-
 const HousePropertySchema = new mongoose.Schema(
   {
     description: {
@@ -78,6 +34,7 @@ const HousePropertySchema = new mongoose.Schema(
     listedBy: {
       type: String,
       required: true,
+      enum: ["owner", "agent", "other"],
     },
     furnishing: {
       type: String,
@@ -133,6 +90,64 @@ const HousePropertySchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
+
+    // Detailed Location Properties
+    location: {
+      city: {
+        type: String,
+        required: true,
+      },
+      area: {
+        type: String,
+        required: true,
+      },
+      locality: {
+        type: String,
+      },
+      fullAddress: {
+        type: String,
+        required: true,
+      },
+      pinCode: {
+        type: String,
+        required: true,
+      },
+      landmark: {
+        type: String,
+      },
+    },
+    availabilityDate: {
+      type: Date,
+      required: true,
+    },
+    amenities: {
+      type: [String],
+      enum: [
+        "parking",
+        "pool",
+        "PowerBackup",
+        "Lift",
+        "gym",
+        "security",
+        "clubhouse",
+        "petfriendly",
+        "foodservice",
+        "wifi",
+        "Laundry",
+      ],
+    },
+    petsAllowed: {
+      type: Boolean,
+      default: false,
+    },
+    electricityChargesIncluded: {
+      type: Boolean,
+      default: false,
+    },
+    negotiable: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true,
@@ -140,6 +155,5 @@ const HousePropertySchema = new mongoose.Schema(
 );
 
 const HouseProperty = mongoose.model("HouseProperty", HousePropertySchema);
-const User = mongoose.model("users", UserSchema);
 
-module.exports = { HouseProperty, User };
+module.exports = { HouseProperty };
