@@ -28,7 +28,28 @@ const registerNewUser = async (req, res) => {
   }
 };
 
+//  POST method for USER LOGIN ✔️
+const loginUser = async (req, res) => {
+  try {
+    const { email, password } = req.body;
 
+    const user = await User.findOne({ email: email });
+
+    if(!user){
+      return res.status(404).json({message: "User not found"});
+    }
+
+    const passValidation = await bcrypt.compare(password, user.password);
+
+    if (!passValidation) {
+      return res.status(401).json({ message: "invalid Password" });
+    }
+
+    res.status(200).json({ message: "Login Successful", user });
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+};
 
 // To Edit User Data  ✔️
 const updateUser = async (req, res) => {
