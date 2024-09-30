@@ -1,5 +1,6 @@
 const bcrypt = require("bcrypt");
 const { User } = require("../models/User");
+const { TokenGenerator } = require("../middlewares/UserAuthentication");
 
 // To access All the USERS ✔️
 const getAllUsers = async (req, res) => {
@@ -22,7 +23,8 @@ const registerNewUser = async (req, res) => {
     }
     const newUser = new User(user);
     const savedUser = await newUser.save();
-    res.status(201).json(savedUser);
+    const token = TokenGenerator(savedUser);
+    res.status(201).json({ user: savedUser, token: token });
   } catch (err) {
     res.status(400).send(err.message);
   }
@@ -35,8 +37,8 @@ const loginUser = async (req, res) => {
 
     const user = await User.findOne({ email: email });
 
-    if(!user){
-      return res.status(404).json({message: "User not found"});
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
     }
 
     const passValidation = await bcrypt.compare(password, user.password);
@@ -45,7 +47,9 @@ const loginUser = async (req, res) => {
       return res.status(401).json({ message: "invalid Password" });
     }
 
-    res.status(200).json({ message: "Login Successful", user });
+    const token = TokenGenerator(user);
+
+    res.status(200).json({ message: "Login Successful", user, token });
   } catch (err) {
     res.status(400).json({ message: err.message });
   }
