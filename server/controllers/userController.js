@@ -23,7 +23,7 @@ const registerNewUser = async (req, res) => {
     }
     const newUser = new User(user);
     const savedUser = await newUser.save();
-    const token = TokenGenerator(savedUser);
+    const token = await TokenGenerator(savedUser);
     res.status(201).json({ user: savedUser, token: token });
   } catch (err) {
     res.status(400).send(err.message);
@@ -47,7 +47,7 @@ const loginUser = async (req, res) => {
       return res.status(401).json({ message: "invalid Password" });
     }
 
-    const token = TokenGenerator(user);
+    const token = await TokenGenerator(user);
 
     res.status(200).json({ message: "Login Successful", user, token });
   } catch (err) {
