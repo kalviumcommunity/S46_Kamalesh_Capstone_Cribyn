@@ -1,13 +1,13 @@
-const { HouseProperty } = require("../models/House");
+const { Property } = require("../models/Property");
 
-const fetchAllData = async (req, res) => {
-  const users = await HouseProperty.find();
+const fetchAllProperties = async (req, res) => {
+  const users = await Property.find();
   res.status(201).json(users);
 };
 
-const createPost = async (req, res) => {
+const createProperty = async (req, res) => {
   try {
-    const newpost = new HouseProperty(req.body);
+    const newpost = new Property(req.body);
     const saved = await newpost.save();
 
     res.json(saved);
@@ -16,10 +16,10 @@ const createPost = async (req, res) => {
   }
 };
 
-const editPost = async (req, res) => {
+const editProperty = async (req, res) => {
   const { postid } = req.params;
   try {
-    const updatedPost = await HouseProperty.findByIdAndUpdate(
+    const updatedPost = await Property.findByIdAndUpdate(
       postid,
       req.body,
       {
@@ -35,4 +35,4 @@ const editPost = async (req, res) => {
   }
 };
 
-module.exports = { fetchAllData, createPost, editPost };
+module.exports = { fetchAllProperties, createProperty, editProperty };
