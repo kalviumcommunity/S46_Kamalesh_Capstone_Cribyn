@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const HousePropertySchema = new mongoose.Schema(
+const PropertySchema = new mongoose.Schema(
   {
     description: {
       type: String,
@@ -154,6 +154,6 @@ const HousePropertySchema = new mongoose.Schema(
   }
 );
 
-const HouseProperty = mongoose.model("HouseProperty", HousePropertySchema);
+const Property = mongoose.model("HouseProperty", PropertySchema);
 
-module.exports = { HouseProperty };
+module.exports = { Property };

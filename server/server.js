@@ -3,7 +3,7 @@ const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
 const cors = require("cors");
-const postRoutes = require("./routes/postRoutes");
+const propertyRoutes = require("./routes/propertyRoutes");
 const userRoutes = require("./routes/userRoutes");
 
 const port = process.env.PORT || 8000;
@@ -11,7 +11,7 @@ const port = process.env.PORT || 8000;
 app.use(express.json());
 app.use(cors());
 app.use("/api/users", userRoutes);
-app.use("/api/posts", postRoutes);
+app.use("/api/property", propertyRoutes);
 
 const connectDB = async () => {
   try {
